@@ -35,7 +35,7 @@ const routerOptions = {
 
 function App() {
   return (
-    <Router {...routerOptions}>
+    <Router basename="/ResearchHub" {...routerOptions}>
       <Toaster position="top-center" />
       <Routes>
         {/* Public Routes */}
