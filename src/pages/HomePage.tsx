@@ -8,6 +8,17 @@ import type { SearchResult } from '../services/searchService';
 
 type PaperCategory = 'all' | 'ai-ml' | 'blockchain' | 'biomedical' | 'quantum-computing';
 
+type SearchResult = {
+  id: string;
+  title: string;
+  author: string;
+  institution?: string;
+  abstract: string;
+  publicationDate: string;
+  category: string;
+  downloadUrl: string;
+};
+
 const HomePage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<PaperCategory>('all');
@@ -28,17 +39,13 @@ const HomePage: React.FC = () => {
           getFeaturedPapers(selectedCategory),
           getPaperCount()
         ]);
-        
-        if (!Array.isArray(papers)) {
-          throw new Error('Invalid papers data received');
-        }
 
         setFeaturedPapers(papers);
-        
+
         if (typeof count !== 'number' || isNaN(count)) {
           throw new Error('Invalid paper count received');
         }
-        
+
         setPaperCount(count);
       } catch (err) {
         console.error('Error fetching data:', err);

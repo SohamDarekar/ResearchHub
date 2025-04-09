@@ -13,6 +13,11 @@ interface UploadFormData {
   field: string;
   authors: string;
   keywords: string;
+  doi: string;
+  publicationDate: string;
+  fundingInfo: string;
+  correspondingAuthor: string;
+  acknowledgments: string;
 }
 
 const UploadPaperPage: React.FC = () => {
@@ -80,6 +85,11 @@ const UploadPaperPage: React.FC = () => {
             keywords: data.keywords.split(',').map(k => k.trim()), // Convert string to array
             pdfUrl: downloadURL,
             uploadedAt: Timestamp.now(),
+            doi: data.doi,
+            publicationDate: data.publicationDate,
+            fundingInfo: data.fundingInfo,
+            correspondingAuthor: data.correspondingAuthor,
+            acknowledgments: data.acknowledgments,
           });
 
           setIsUploading(false);
@@ -134,6 +144,76 @@ const UploadPaperPage: React.FC = () => {
             <label htmlFor="abstract" className="block text-sm font-medium text-gray-700 mb-1">Abstract</label>
             <textarea id="abstract" rows={4} {...register('abstract', { required: 'Abstract is required' })} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
             {errors.abstract && <p className="mt-1 text-sm text-red-600">{errors.abstract.message}</p>}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="field" className="block text-sm font-medium text-gray-700 mb-1">Field of Study</label>
+              <select id="field" {...register('field', { required: 'Field is required' })} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="">Select a field</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Medicine">Medicine</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Social Sciences">Social Sciences</option>
+                <option value="Humanities">Humanities</option>
+              </select>
+              {errors.field && <p className="mt-1 text-sm text-red-600">{errors.field.message}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="university" className="block text-sm font-medium text-gray-700 mb-1">University/Institution</label>
+              <input id="university" type="text" {...register('university', { required: 'Institution is required' })} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+              {errors.university && <p className="mt-1 text-sm text-red-600">{errors.university.message}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="authors" className="block text-sm font-medium text-gray-700 mb-1">Authors (comma-separated)</label>
+              <input id="authors" type="text" {...register('authors', { required: 'Authors are required' })} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+              {errors.authors && <p className="mt-1 text-sm text-red-600">{errors.authors.message}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="correspondingAuthor" className="block text-sm font-medium text-gray-700 mb-1">Corresponding Author Email</label>
+              <input id="correspondingAuthor" type="email" {...register('correspondingAuthor', { 
+                required: 'Corresponding author email is required',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address"
+                }
+              })} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+              {errors.correspondingAuthor && <p className="mt-1 text-sm text-red-600">{errors.correspondingAuthor.message}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="keywords" className="block text-sm font-medium text-gray-700 mb-1">Keywords (comma-separated)</label>
+              <input id="keywords" type="text" {...register('keywords', { required: 'Keywords are required' })} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+              {errors.keywords && <p className="mt-1 text-sm text-red-600">{errors.keywords.message}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="doi" className="block text-sm font-medium text-gray-700 mb-1">DOI (if available)</label>
+              <input id="doi" type="text" {...register('doi')} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
+
+            <div>
+              <label htmlFor="publicationDate" className="block text-sm font-medium text-gray-700 mb-1">Publication Date</label>
+              <input id="publicationDate" type="date" {...register('publicationDate', { required: 'Publication date is required' })} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+              {errors.publicationDate && <p className="mt-1 text-sm text-red-600">{errors.publicationDate.message}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="fundingInfo" className="block text-sm font-medium text-gray-700 mb-1">Funding Information</label>
+              <input id="fundingInfo" type="text" {...register('fundingInfo')} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Grant numbers, funding bodies, etc." />
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <label htmlFor="acknowledgments" className="block text-sm font-medium text-gray-700 mb-1">Acknowledgments</label>
+            <textarea id="acknowledgments" rows={3} {...register('acknowledgments')} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Acknowledge contributors, institutions, etc."></textarea>
           </div>
 
           {/* Submit Button */}
